@@ -1,8 +1,9 @@
 {
-  "name": "Short-Link-App",
+  "name": "Notes",
   "private": true,
   "scripts": {
-    "start": "meteor run"
+    "start": "meteor run",
+    "test": "meteor test --driver-package=practicalmeteor:mocha"
   },
   "dependencies": {
     "babel-runtime": "^6.20.0",

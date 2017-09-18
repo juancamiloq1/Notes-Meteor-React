@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import expect, { createSpy, spyOn, isSpy } from 'expect';
+import expect from 'expect';
 import { validateNewUser } from './users';
 
 if ( Meteor.isServer ) {

@@ -2,8 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Accounts } from 'meteor/accounts-base';
 import { Meteor } from 'meteor/meteor';
+import { createContainer } from 'meteor/react-meteor-data';
 
-export default class Signup extends React.Component{
+export class Signup extends React.Component{
     constructor(props){
       super(props);
       this.state = {
@@ -27,7 +28,7 @@ export default class Signup extends React.Component{
         return this.setState({ error: 'La contraseña debe tener mas de 8 caracteres.'});
       }
 
-      Accounts.createUser({ email: email, password: password }, (err) => {   // lo mismo que solo escribir {email, password} por ES6.
+      this.props.createUser({ email: email, password: password }, (err) => {   // lo mismo que solo escribir {email, password} por ES6.
         if (err) {
           this.setState({ error: err.reason });
         } else {
@@ -52,3 +53,13 @@ export default class Signup extends React.Component{
       );
     }
   };
+
+  Signup.propTypes = {
+    createUser: React.PropTypes.func.isRequired
+  };
+
+  export default createContainer( () => {
+    return{
+      createUser: Accounts.createUser
+    };
+  }, Signup);

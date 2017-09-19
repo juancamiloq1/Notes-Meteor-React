@@ -12,10 +12,18 @@ if( Meteor.isServer ) {
             updatedAt: 0,
             userId: 'testUserId1'
         };
+        const noteTwo = {
+            _id: 'testNoteId2',
+            title: 'Things to buy',
+            body: 'Couch',
+            updatedAt: 0,
+            userId: 'testUserId2'
+        };
 
         beforeEach( function () {
             Notes.remove({});
             Notes.insert(noteOne);
+            Notes.insert(noteTwo);
         });
 
         it( 'Deberia insertar nueva nota', function () {
@@ -106,5 +114,19 @@ if( Meteor.isServer ) {
             }).toThrow();
         });
 
+        it('Deberia return las notas del usuario actual', function(){
+            const res = Meteor.server.publish_handlers.notes.apply({ userId: noteOne.userId });
+            const notes = res.fetch();
+
+            expect(notes.length).toBe(1);
+            expect(notes[0]).toEqual(noteOne);
+        });
+
+        it('No deberia return ninguna nota para los usuarios que no tienen ninguna.', function(){
+            const res = Meteor.server.publish_handlers.notes.apply({ userId: 'testid' });
+            const notes = res.fetch();
+
+            expect(notes.length).toBe(0);
+        });
     });
 }

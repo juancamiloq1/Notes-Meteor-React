@@ -8,7 +8,7 @@ import PrivateHeader from './PrivateHeader';
 if( Meteor.isClient ) {
     describe('PrivateHeader', function(){
         it('Deberia poner el texto del boton a Cerrar Sesión', function(){
-           const wrapper = mount( <PrivateHeader title='Test title'/> );
+           const wrapper = mount( <PrivateHeader title='Test title' handleLogout={ () => {}}/> );
 
            const buttonText = wrapper.find('button').text();
 
@@ -21,6 +21,15 @@ if( Meteor.isClient ) {
             const actualTitle = wrapper.find('h1').text();
 
             expect(actualTitle).toBe(title);
+        });
+
+        it('Deberia call handleLogout on Click', function(){
+            const spy = expect.createSpy();
+            const wrapper = mount( <PrivateHeader title='Title' handleLogout={spy} /> );
+
+            wrapper.find('button').simulate('click');
+
+            expect(spy).toHaveBeenCalled();
         });
     });
 }

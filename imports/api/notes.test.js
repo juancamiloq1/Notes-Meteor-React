@@ -77,5 +77,34 @@ if( Meteor.isServer ) {
             }).toThrow();
         });
 
+        it('No deberia actualizar nota si el usuario no es el creador', function(){
+            const title = 'Este es un titulo actualizado';
+            
+            Meteor.server.method_handlers['notes.update'].apply({
+                userId: 'testid'
+            }, [
+                noteOne._id, 
+                { title }
+            ]);
+
+            const note = Notes.findOne( noteOne._id );
+            
+            expect(note).toInclude(noteOne);
+        });
+
+        it('No deberia actualizar nota si no esta autenticado', function(){
+            expect( () => {
+                Meteor.server.method_handlers['notes.update'].apply( {}, [noteOne._id]);
+            }).toThrow();
+        });
+
+        it('No deberia actualizar nota si el Id es invalido', function(){
+            expect( () => {
+                Meteor.server.method_handlers['notes.update'].apply({ 
+                    userId: noteOne.userId
+                });
+            }).toThrow();
+        });
+
     });
 }
